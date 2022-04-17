@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "sharding/version"
+require "sidekiq-sharding/sidekiq_sharding"
 
-module Sidekiq
-  module Sharding
-    class Error < StandardError; end
-    # Your code goes here...
-  end
-end
+Sidekiq::Sharding = SidekiqSharding

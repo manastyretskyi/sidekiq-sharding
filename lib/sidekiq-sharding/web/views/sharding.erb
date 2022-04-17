@@ -1,0 +1,26 @@
+<header class="row">
+  <div class="col-sm-12">
+    <h3>
+      <%= t('current_shard') %>
+    </h3>
+
+    <% if @shards.any? %>
+      <form action="<%= root_path %>sharding/change-shard" class="form form-inline" method="post">
+        <%= csrf_tag %>
+        <select name="shard" class="form-control">
+          <option value label=" "></option>
+          <% @shards.each do |option| %>
+            <option value="<%= option %>" <%= "selected" if @current_shard == option %>>
+              <%= option %>
+            </option>
+          <% end %>
+        </select>
+        <button class="btn btn-default" type="submit">
+          <%= t('change_shard') %>
+        </button>
+      </form>
+    <% else %>
+      <div class="alert alert-success"><%= t('shards_not_configured') %></div>
+    <% end %>
+  </div>
+</header>

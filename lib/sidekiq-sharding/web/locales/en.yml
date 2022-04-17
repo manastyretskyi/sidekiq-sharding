@@ -1,0 +1,5 @@
+en:
+  sharding: "Sharding"
+  change_shard: "Change Shard"
+  current_shard: "Current Shard"
+  shards_not_configured: "Shards not configured"

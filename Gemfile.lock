@@ -5,6 +5,7 @@ PATH
       concurrent-ruby (~> 1.0, >= 1.0.5)
       redis (>= 4.2.0)
       sidekiq (>= 6)
+      tilt (>= 2.0.10)
 
 GEM
   remote: https://rubygems.org/
@@ -38,6 +39,7 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
+    tilt (2.0.10)
     unicode-display_width (2.1.0)
 
 PLATFORMS

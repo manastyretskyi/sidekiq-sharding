@@ -29,8 +29,9 @@ module SidekiqSharding
     if shard.nil? || (redis_config = shard_config(shard: shard.to_sym)).nil?
       yield
     else
+      original_redis = Sidekiq.redis_pool
+      original_redis_config = Sidekiq.default_configuration.instance_variable_get("@redis_config")
       begin
-        original_redis = Sidekiq.redis_pool
         Sidekiq.default_configuration.redis = redis_config
 
         begin
@@ -42,10 +43,10 @@ module SidekiqSharding
         result = yield
 
         Sidekiq.redis_pool.shutdown(&:quit)
-
         result
       ensure
-        Sidekiq.default_configuration.redis = original_redis
+        original_redis.shutdown(&:quit)
+        Sidekiq.default_configuration.redis = original_redis_config
       end
     end
   end

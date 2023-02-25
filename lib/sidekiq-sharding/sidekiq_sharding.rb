@@ -30,9 +30,14 @@ module SidekiqSharding
       yield
     else
       original_redis = Sidekiq.redis_pool
-      original_redis_config = Sidekiq.default_configuration.instance_variable_get("@redis_config")
+      new_pool = Sidekiq::RedisConnection.create({
+        size: 5,
+        logger: Sidekiq.default_configuration.logger,
+        pool_name: shard.to_s
+      }.merge(redis_config))
+
       begin
-        Sidekiq.default_configuration.redis = redis_config
+        Thread.current[:sidekiq_redis_pool] = new_pool
 
         begin
           Sidekiq.redis(&:ping)
@@ -42,11 +47,10 @@ module SidekiqSharding
 
         result = yield
 
-        Sidekiq.redis_pool.shutdown(&:quit)
         result
       ensure
-        original_redis.shutdown(&:quit)
-        Sidekiq.default_configuration.redis = original_redis_config
+        Thread.current[:sidekiq_redis_pool] = original_redis
+        new_pool.shutdown(&:quit)
       end
     end
   end

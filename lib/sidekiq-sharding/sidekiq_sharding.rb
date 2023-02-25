@@ -31,7 +31,7 @@ module SidekiqSharding
     else
       begin
         original_redis = Sidekiq.redis_pool
-        Sidekiq.redis = redis_config
+        Sidekiq.default_configuration.sidekiq = redis_config
 
         begin
           Sidekiq.redis(&:ping)
@@ -45,7 +45,7 @@ module SidekiqSharding
 
         result
       ensure
-        Sidekiq.redis = original_redis
+        Sidekiq.default_configuration.sidekiq = original_redis
       end
     end
   end
